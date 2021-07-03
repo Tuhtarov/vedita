@@ -1,7 +1,5 @@
 <?php /** @noinspection ALL */
 
-
-
 class News
 {
     public static function getNewsItemById(int $id): array

@@ -1,11 +1,7 @@
 <?php
 
-include_once ROOT . '/app/Models/Products.php';
+require_once ROOT . '/app/Models/Products.php';
 
-/**
- * Контроллер товаров, отвечает за общение View и Model.
- * Class ProductsController
- */
 class ProductsController extends Products
 {
     /**
@@ -13,11 +9,14 @@ class ProductsController extends Products
      */
     public function actionIndex()
     {
-        parent::__construct();
-        $products = $this->getProducts();
+//        echo __METHOD__;
+        $products = $this->getProductsBySortDate(2);
         foreach ($products as $product) {
-            echo '<br>' . $product->id;
+//            var_dump($product);
         }
+        echo "<link rel='stylesheet' href=''>";
+
+        require_once ROOT . '/resources/views/products/index.html';
     }
 
     /**
@@ -26,11 +25,8 @@ class ProductsController extends Products
      */
     public function actionView(int $id)
     {
-//        $connection = new DBconnection();
-//        $pdo = $connection->getPDO();
-//
-//        $statement = $pdo->query('SELECT * FROM `products`');
-//        $statement->execute();
-//        var_dump($statement);
+        echo __METHOD__;
+        $product = $this->getProductById($id);
+        var_dump($product);
     }
 }

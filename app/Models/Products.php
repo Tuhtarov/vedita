@@ -10,12 +10,14 @@ class Products extends Model
     }
 
     /**
-     * Метод возвращает массив, в котором содержится список товаров, с заданным количеством.
-     * Количество товаров для вывыда по умолчанию - 10.
-     * @param int $qty - колличество записей.
+     * Метод возвращает массив объектов, в котором содержится список товаров, с заданным количеством записей.
+     * Количество товаров для вывода по умолчанию - 10.
+     * @param int $qtyRecords - количество товаров в массиве.
+     * @return array
      */
-    protected function getProducts(int $qty = 10): array {
-        $query = $this->pdo->query('SELECT * FROM `products`');
+    protected function getProducts(int $qtyRecords = 10): array
+    {
+        $query = $this->pdo->query('SELECT * FROM `products` LIMIT ' . $qtyRecords);
 
         while ($row = $query->fetch(PDO::FETCH_OBJ)) {
             $products[] = $row;
@@ -23,6 +25,56 @@ class Products extends Model
 
         return $products;
     }
+
+    /**
+     * Метод возвращает массив, в котором содержится вся информация о товаре в виде объекта.
+     * @param int $id - id товара.
+     * @return array
+     */
+    protected function getProductById(int $id): array
+    {
+        $query = $this->pdo->query("SELECT * FROM `products` WHERE `id` = " . $id);
+
+        while ($row = $query->fetch(PDO::FETCH_OBJ)) {
+            $product[] = $row;
+        }
+
+        return $product;
+    }
+
+    /**
+     * Метод возвращает массив объектов, в котором содержится отсортированный по дате список товаров,
+     * с заданным количеством записей. Количество товаров для вывода по умолчанию - 10.
+     * @param int $qtyRecords - количество товаров в массиве.
+     * @param string|null $orderBy - необязательный параметр со строковым значением "ASC" или "DESC", по умолчанию "DESC".
+     * @return array
+     */
+    protected function getProductsBySortDate(int $qtyRecords = 10, string $orderBy = null): array
+    {
+        $orderBy = strtoupper($orderBy);
+        $sortByAsc = 'ASC';
+        $sortByDesc = 'DESC';
+
+        if ($orderBy == null || $orderBy == $sortByDesc) {
+            $sort = $sortByDesc;
+        } else {
+            if ($orderBy == $sortByAsc) {
+                $sort = $sortByAsc;
+            } else {
+                die(__METHOD__ . ' Необходимо указать сортировку по возрастанию - ASC, или убыванию - DESC');
+            }
+        }
+
+        $query = $this->pdo
+            ->query('SELECT * FROM `products` ORDER BY `created_at` ' . $sort . ' LIMIT ' . $qtyRecords);
+
+        while ($row = $query->fetch(PDO::FETCH_OBJ)) {
+            $products[] = $row;
+        }
+
+        return $products;
+    }
+
 
 }
 
