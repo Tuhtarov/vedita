@@ -12,7 +12,7 @@ class Router extends ControllerSearch
         $uri = $this->getUri();
 
         if ($uri == '') {
-            exit('Главная страница');
+            $this->runController('products');
         } else {
             $this->runController($uri);
         }

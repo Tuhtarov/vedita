@@ -43,14 +43,18 @@ body {
 }
 
 .nav-link {
-    padding: 8px 12px;
-    color: black;
+    margin: 5px 0;
+    padding: 5px 8px;
+    color: white;
+    background: rgb(54, 54, 54);
     display: inline-block;
     text-decoration: none;
 }
 
 .nav-link:hover {
-    background: #ccc;
+    color: white;
+    background: rgb(14, 13, 13);
+    outline: 0.5px solid white;
 }
 
 
@@ -147,27 +151,45 @@ body {
 /* FORM */
 
 .form {
-    width: 500px;
+    width: 80%;
     padding: 20px;
-    margin: auto;
+    margin: 0;
     background: whitesmoke;
 }
 
 .form-title {
     margin: 0 0 10px;
     text-align: start;
-    font-size: 22px;
+    font-size: 18px;
+}
+
+.form-label {
+    text-align: start;
+    font-size: 14px;
 }
 
 .form-group {
+    margin-top: 5px;
     margin-bottom: 15px;
 }
 
 .form-input {
     padding: 5px;
-
+    display: block;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
+}
+
+.form-btn {
+    padding: 5px;
+    margin-top: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+
+.form-btn:hover {
+    cursor: pointer;
 }
 
 .form-textarea {
@@ -175,9 +197,24 @@ body {
     height: 150px;
     padding: 5px;
     border: 1px solid black;
-
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
+}
+
+.form-column {
+    margin: 0;
+    width: 100%;
+    display: flex;
+}
+
+.form-col-1{
+    margin: 0;
+    width: 50%;
+}
+
+.form-col-2{
+    margin: 0;
+    width: 50%;
 }
 
 /* Footer */

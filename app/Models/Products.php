@@ -15,7 +15,7 @@ class Products extends Model
      * @param int $qtyRecords - количество товаров в массиве.
      * @return array
      */
-    protected function getProducts(int $qtyRecords = 10): array
+    public function getProducts(int $qtyRecords = 10): ?array
     {
         $query = $this->pdo->query('SELECT * FROM `products` LIMIT ' . $qtyRecords);
 
@@ -23,7 +23,7 @@ class Products extends Model
             $products[] = $row;
         }
 
-        return $products;
+        return $products ?? null;
     }
 
     /**
@@ -31,7 +31,7 @@ class Products extends Model
      * @param int $id - id товара.
      * @return array
      */
-    protected function getProductById(int $id): array
+    public function getProductById(int $id): ?array
     {
         $query = $this->pdo->query("SELECT * FROM `products` WHERE `id` = " . $id);
 
@@ -39,7 +39,7 @@ class Products extends Model
             $product[] = $row;
         }
 
-        return $product;
+        return $product ?? null;
     }
 
     /**
@@ -49,7 +49,7 @@ class Products extends Model
      * @param string|null $orderBy - необязательный параметр со строковым значением "ASC" или "DESC", по умолчанию "DESC".
      * @return array
      */
-    protected function getProductsBySortDate(int $qtyRecords = 10, string $orderBy = null): array
+    public function getProductsBySortDate(int $qtyRecords = 10, string $orderBy = null): ?array
     {
         $orderBy = strtoupper($orderBy);
         $sortByAsc = 'ASC';
@@ -66,15 +66,28 @@ class Products extends Model
         }
 
         $query = $this->pdo
-            ->query('SELECT * FROM `products` ORDER BY `created_at` ' . $sort . ' LIMIT ' . $qtyRecords);
+            ->query('SELECT * FROM `products` WHERE `hidden` is null ORDER BY `created_at` ' . $sort . ' LIMIT ' . $qtyRecords);
 
         while ($row = $query->fetch(PDO::FETCH_OBJ)) {
             $products[] = $row;
         }
 
-        return $products;
+        return $products ?? null;
     }
 
+    /**
+     * Метод создаёт новую запись (новый продукт) в таблице products.
+     * @param array $product массив полей (пример: name => "example", article => "ex-228", n..), для создания новой записи
+     * в таблице.
+     * @return bool результат выполнения запроса (true - запись создана, false - запись не создана)
+     */
+    public function create(array $product): bool
+    {
+        $query = $this->pdo->prepare("INSERT INTO products (name, article, quantity, price)
+                                VALUES (:name, :article, :quantity, :price)");
+        $query = $query->execute($product);
+        return $query;
+    }
 
 }
 
