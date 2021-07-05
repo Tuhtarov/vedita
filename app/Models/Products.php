@@ -83,10 +83,12 @@ class Products extends Model
      */
     public function create(array $product) : ?int
     {
+        //создание записи в таблице
         $query = $this->pdo->prepare("INSERT INTO products (name, article, quantity, price)
                                 VALUES (:name, :article, :quantity, :price)");
         $result = $query->execute($product);
 
+        //если запись создалась, то взять её ID (это нужно для отображения изменений в View, при помощи jQuery)
         if($result == true) {
             $query = $this->pdo->query('SELECT `id` FROM `products`
                                                 WHERE name = ' . "'{$product['name']}'" . '
