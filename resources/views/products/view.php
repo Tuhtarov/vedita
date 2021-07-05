@@ -32,7 +32,6 @@
                         <th>Артикул</th>
                         <th>Количество</th>
                         <th>Стоимость</th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,13 +41,8 @@
                             <td><?= $product->article ?></td>
                             <td>
                                 <p><?= $product->quantity ?></p>
-                                <button>+</button>
-                                <button>-</button>
                             </td>
                             <td><?= $product->price ?></td>
-                            <td>
-                                <button>Скрыть</button>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -61,7 +55,5 @@
         <p class="footer-subtitle">Тухтаров.</p>
     </footer>
 </div>
-<script type="text/javascript" src="/resources/template/js/jQuery/jquery.min.js"></script>
-<script type="text/javascript" src="/resources/views/products/ajax/store.js"></script>
 </body>
 </html>

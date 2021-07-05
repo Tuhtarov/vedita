@@ -55,6 +55,7 @@ class Products extends Model
         $sortByAsc = 'ASC';
         $sortByDesc = 'DESC';
 
+        //проверка на правильность использования метода
         if ($orderBy == null || $orderBy == $sortByDesc) {
             $sort = $sortByDesc;
         } else {
@@ -65,8 +66,7 @@ class Products extends Model
             }
         }
 
-        $query = $this->pdo
-            ->query('SELECT * FROM `products` WHERE `hidden` is null ORDER BY `created_at` ' . $sort . ' LIMIT ' . $qtyRecords);
+        $query = $this->pdo->query('SELECT * FROM `products` WHERE `hidden` is null ORDER BY `created_at` ' . $sort . ' LIMIT ' . $qtyRecords);
 
         while ($row = $query->fetch(PDO::FETCH_OBJ)) {
             $products[] = $row;
@@ -79,14 +79,56 @@ class Products extends Model
      * Метод создаёт новую запись (новый продукт) в таблице products.
      * @param array $product массив полей (пример: name => "example", article => "ex-228", n..), для создания новой записи
      * в таблице.
-     * @return bool результат выполнения запроса (true - запись создана, false - запись не создана)
+     * @return int возвращает id добавленной записи, либо null - если запрос выполнить не удалось
      */
-    public function create(array $product): bool
+    public function create(array $product) : ?int
     {
         $query = $this->pdo->prepare("INSERT INTO products (name, article, quantity, price)
                                 VALUES (:name, :article, :quantity, :price)");
-        $query = $query->execute($product);
-        return $query;
+        $result = $query->execute($product);
+
+        if($result == true) {
+            $query = $this->pdo->query('SELECT `id` FROM `products`
+                                                WHERE name = ' . "'{$product['name']}'" . '
+                                                  AND article = ' . "'{$product['article']}'" . ' 
+                                                  AND quantity =' . "'{$product['quantity']}'" . '
+                                                  AND price = ' . "'{$product['price']}'");
+            while ($row = $query->fetch(PDO::FETCH_OBJ)) {
+                $result = $row->id;
+            }
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Метод перезаписывает поле hidden по id записи таблицы products.
+     * @return bool результат выполнения запроса (true - операция успешна, false - ошибка выполнения)
+     */
+    public function hideProductById(int $idProduct): bool
+    {
+        $hiddenDate = date('Y-m-d H:i:s');
+        $query = $this->pdo->prepare("UPDATE `products` SET `hidden` = :date WHERE `products`.`id` = :id");
+        $result = $query->execute([
+            'date' => $hiddenDate,
+            'id' => $idProduct
+        ]);
+        return $result;
+    }
+
+    /**
+     * Метод перезаписывает поле quantity по id записи таблицы products, дополнительный параметр - новое количество товара.
+     * @return bool результат выполнения запроса (true - операция успешна, false - ошибка выполнения)
+     */
+    public function changeQtyProductById(int $idProduct, int $qtyProduct): bool
+    {
+        $query = $this->pdo->prepare("UPDATE `products` SET `quantity` = :qty WHERE `products`.`id` = :id");
+        $result = $query->execute([
+            'qty' => $qtyProduct,
+            'id' => $idProduct
+        ]);
+        return $result;
     }
 
 }

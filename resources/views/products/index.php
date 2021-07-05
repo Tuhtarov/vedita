@@ -20,7 +20,7 @@
                         Товары
                     </h1>
                     <div>
-                        <form class="form" id="product">
+                        <form class="form" id="product_form">
                             <h2 class="form-title">Добавить новый товар</h2>
                             <div class="form-column">
                                 <div class="form-col-1">
@@ -51,7 +51,7 @@
                     </div>
                     <hr>
                     <div class="table-container">
-                        <table class="table">
+                        <table class="table" id="product_table">
                             <thead>
                             <tr>
                                 <th>№</th>
@@ -65,7 +65,7 @@
                             <tbody>
                             <?php foreach($products as $product): ?>
                                 <tr>
-                                    <td><?= $product->id ?></td>
+                                    <td id="product_id"><?= $product->id ?></td>
                                     <td>
                                         <a href="<?= '/products/' . $product->id ?>">
                                             <?= $product->name ?>
@@ -73,13 +73,13 @@
                                     </td>
                                     <td><?= $product->article ?></td>
                                     <td>
-                                        <p><?= $product->quantity ?></p>
-                                        <button>+</button>
-                                        <button>-</button>
+                                        <p id="product_qty"><?= $product->quantity ?></p>
+                                        <button class="btn_qty_up" id="btn_qty_up">+</button>
+                                        <button class="btn_qty_down" id="btn_qty_down">-</button>
                                     </td>
                                     <td><?= $product->price ?></td>
                                     <td>
-                                        <button>Скрыть</button>
+                                        <button class="btn_hide_row" id="btn_hide_row">Скрыть</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -100,5 +100,7 @@
     </div>
     <script type="text/javascript" src="/resources/template/js/jQuery/jquery.min.js"></script>
     <script type="text/javascript" src="/resources/views/products/ajax/store.js"></script>
+    <script type="text/javascript" src="/resources/views/products/ajax/hide.js"></script>
+    <script type="text/javascript" src="/resources/views/products/ajax/change.js"></script>
 </body>
 </html>

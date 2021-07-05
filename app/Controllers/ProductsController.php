@@ -40,14 +40,42 @@ class ProductsController
         require_once ROOT . '/resources/views/products/view.php';
     }
 
+    /*--------------------------------------Работа с запросами Ajax-----------------------------------------*/
+
     /**
-     * Создание новой записи в таблице products. Этот метод вызывается при запуске скрипта
+     * Создание новой записи в таблице products. Этот метод вызывается из скрипта
      * 'store' (resources/views/products/ajax/store.js).
      */
     public function actionStore()
     {
         $newProduct = $_POST['product'];
         $result = $this->products->create($newProduct);
+        if (is_null($result)) {
+            echo false;
+        }
+        echo $result;
+    }
+
+    /**
+     * Сохранение отметки о сокрытии записи в таблице products. Этот метод вызывается из скрипта
+     * 'hide' (resources/views/products/ajax/hide.js).
+     */
+    public function actionHide()
+    {
+        $id = $_POST['idProduct'];
+        $result = $this->products->hideProductById($id);
+        echo $result;
+    }
+
+    /**
+     * Изменение количества товара в таблице products. Этот метод вызывается из скрипта
+     * 'change' (resources/views/products/ajax/change.js).
+     */
+    public function actionChange()
+    {
+        $id = $_POST['idProduct'];
+        $qty = $_POST['qtyProduct'];
+        $result = $this->products->changeQtyProductById($id, $qty);
         echo $result;
     }
 }
